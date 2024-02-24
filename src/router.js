@@ -1,7 +1,7 @@
 const express = require('express');
 const { registerUser, updateUser, detailUser, getUsers, deleteUser } = require('./controllers/userController');
 const { registerTheme } = require('./controllers/themeController');
-const { registerPost } = require('./controllers/postController');
+const { registerPost, updatePost } = require('./controllers/postController');
 
 const validateRequest = require('./middlewares/validateRequest');
 const { userSchema } = require('./validations/userSchema');
@@ -19,6 +19,8 @@ route.put('/user/:id', validateRequest(userSchema), updateUser);
 
 route.post('/theme', validateRequest(themeSchema), registerTheme);
 route.post('/post', validateRequest(postSchema), registerPost);
+route.put('/post/:id', validateRequest(postSchema), updatePost);
+
 
 
 
