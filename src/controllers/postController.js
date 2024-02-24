@@ -127,6 +127,7 @@ const deletePost = async (req, res) => {
         res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 }
+
 module.exports = {
     registerPost,
     updatePost,
