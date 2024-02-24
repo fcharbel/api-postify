@@ -8,6 +8,13 @@ const registerUser = async (req, res) => {
     } = req.body;
 
     try {
+
+        const existingEmail = await knex('usuario').where({ email }).first();
+
+        if (existingEmail) {
+            return res.status(400).json({ mensagem: 'Email já cadastrado.' });
+        }
+
         const newUser = await knex('usuario')
             .insert({
                 nome,
