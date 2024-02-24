@@ -36,7 +36,7 @@ const registerPost = async (req, res) => {
 
         res.status(201).json({ mensagem: 'Postagem realizada com sucesso:', post: newPost });
     } catch (error) {
-        res.status(500).json({ mensagem: 'Erro interno do servidor', error: error.message });
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 }
 
@@ -81,7 +81,7 @@ const updatePost = async (req, res) => {
             .json({ mensagem: "Post atualizado com sucesso!", postagem: updatedPost });
 
     } catch (error) {
-        res.status(500).json({ mensagem: 'Erro interno do servidor', error: error.message });
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 }
 
@@ -110,9 +110,27 @@ const detailPost = async (req, res) => {
     }
 }
 
+const deletePost = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const postFound = await knex('postagem').where({ id }).first();
+
+        if (!postFound) {
+            return res.status(404).json({ mensagem: 'Post não encontrado.' });
+        }
+
+        await knex('postagem').del().where({ id });
+
+        return res.status(200).json({ mensagem: 'Post excluído com sucesso!' });
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+}
 module.exports = {
     registerPost,
     updatePost,
     getPosts,
-    detailPost
+    detailPost,
+    deletePost
 };
