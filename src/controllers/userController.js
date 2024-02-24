@@ -113,8 +113,25 @@ const detailUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
-};
+}
 
+const deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const userFound = await knex('usuario').where({ id }).first();
+
+        if (!userFound) {
+            return res.status(404).json({ mensagem: 'Usário não encontrado.' });
+        }
+
+        await knex('usuario').del().where({ id });
+
+        return res.status(200).json({ mensagem: 'Usuário excluído com sucesso!' });
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+}
 
 
 
@@ -122,5 +139,6 @@ module.exports = {
     registerUser,
     updateUser,
     getUsers,
-    detailUser
+    detailUser,
+    deleteUser
 };

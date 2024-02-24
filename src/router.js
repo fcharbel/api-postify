@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, updateUser, detailUser, getUsers } = require('./controllers/userController');
+const { registerUser, updateUser, detailUser, getUsers, deleteUser } = require('./controllers/userController');
 const { registerTheme } = require('./controllers/themeController');
 const { registerPost } = require('./controllers/postController');
 
@@ -12,6 +12,7 @@ const route = express();
 
 route.get('/user', getUsers);
 route.get('/user/:id', detailUser);
+route.delete('/user/:id', deleteUser);
 route.post('/user', validateRequest(userSchema), registerUser);
 route.put('/user/:id', validateRequest(userSchema), updateUser);
 
