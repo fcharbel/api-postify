@@ -51,11 +51,6 @@ const updatePost = async (req, res) => {
     } = req.body;
 
     try {
-        // const existingPost = await knex('postagem').where({ id }).first();
-
-        // if (!existingPost) {
-        //     return res.status(400).json({ mensagem: 'Post não encontrado.' });
-        // }
         const existingUser = await knex('usuario').where({ id: usuario_id }).first();
 
         if (!existingUser) {
@@ -90,8 +85,34 @@ const updatePost = async (req, res) => {
     }
 }
 
+const getPosts = async (req, res) => {
+    try {
+        const allPosts = await knex('postagem');
+        res.status(200).json(allPosts);
+
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+}
+
+const detailPost = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const post = await knex('postagem').where({ id }).first();
+
+        if (!post) {
+            return res.status(404).json({ mensagem: 'Post não encontrado' });
+        }
+
+        res.status(200).json(post);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+}
 
 module.exports = {
     registerPost,
-    updatePost
+    updatePost,
+    getPosts,
+    detailPost
 };
