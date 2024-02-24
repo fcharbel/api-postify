@@ -72,8 +72,55 @@ const updateUser = async (req, res) => {
     }
 }
 
+const getUsers = async (req, res) => {
+    try {
+        const allUsers = await knex('usuario');
+        res.status(200).json(allUsers);
+
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+}
+
+const detailUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await knex('usuario').where({ id }).first();
+
+        if (!user) {
+            return res.status(404).json({ mensagem: 'Usuário não encontrado' });
+        }
+
+        const detailedUser = await knex('usuario')
+            .select('usuario.nome', 'usuario.email', 'postagem.id', 'postagem.titulo', 'postagem.texto', 'postagem.data', 'tema.descricao as tema')
+            .leftJoin('postagem', 'usuario.id', 'postagem.usuario_id')
+            .leftJoin('tema', 'postagem.tema_id', 'tema.id')
+            .where('usuario.id', id);
+
+        const detailedUserFormatted = {
+            nome: detailedUser[0].nome,
+            email: detailedUser[0].email,
+            posts: detailedUser.map(postagem => ({
+                id: postagem.id,
+                titulo: postagem.titulo,
+                texto: postagem.texto,
+                data: postagem.data,
+                tema: postagem.tema
+            }))
+        };
+
+        res.status(200).json(detailedUserFormatted);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+};
+
+
+
 
 module.exports = {
     registerUser,
-    updateUser
+    updateUser,
+    getUsers,
+    detailUser
 };
