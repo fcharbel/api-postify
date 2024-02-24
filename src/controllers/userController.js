@@ -33,6 +33,47 @@ const registerUser = async (req, res) => {
     }
 }
 
+const updateUser = async (req, res) => {
+    const { id } = req.params;
+    const {
+        nome,
+        email,
+        foto
+    } = req.body;
+
+    try {
+        const emailExists = await knex('usuario')
+            .where({ email })
+            .whereNot({ id })
+            .first();
+
+        if (emailExists) {
+            return res.status(400).json({ mensagem: "Email já cadastrado." });
+        }
+        const updatedUser = await knex('usuario')
+            .where({ id })
+            .update({
+                nome,
+                email,
+                foto
+            })
+            .returning('*');
+
+        if (updatedUser.length === 0) {
+            return res.status(400).json({ mensagem: "Usuário não encontrado" });
+        }
+
+        return res
+            .status(200)
+            .json({ mensagem: "Usuário atualizado com sucesso!", usuário_atualizado: updatedUser });
+
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro interno do servidor', error: error.message });
+    }
+}
+
+
 module.exports = {
-    registerUser
+    registerUser,
+    updateUser
 };
