@@ -5,7 +5,7 @@
     "title": "api-postify",
     "description": "A API for managing posts by users"
   },
-  "host": "api-postify.onrender.com/",
+  "host": "api-postify.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
