@@ -86,7 +86,20 @@ const updatePost = async (req, res) => {
 }
 
 const getPosts = async (req, res) => {
+    const { usuario_id } = req.query;
+
     try {
+        if (usuario_id) {
+            const user = await knex('postagem').where({ usuario_id }).first();
+
+            if (!user) {
+                return res.status(404).json({ mensagem: "Usuário não encontrado" });
+            }
+
+            const postsByUser = await knex('postagem').where({ usuario_id });
+            return res.status(200).json(postsByUser);
+        }
+
         const allPosts = await knex('postagem');
         res.status(200).json(allPosts);
 

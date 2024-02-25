@@ -4,7 +4,8 @@
   "description": "API desenvolvida como projeto de conclusão do Programa em Desenvolvimento Web/Cloud AWS da Generation Brasil em parceria com AWS.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
   },
   "keywords": [],
   "author": "",
